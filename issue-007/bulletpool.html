@@ -91,6 +91,25 @@
 
     };
 
+    Weapon.fireAmmo = function(context, x, y, angle, speed, gx, gy, resetFire){
+        
+        gx = gx || 0;
+        gy = gy || 0;
+        var ammo = context.getFirstExists(false);
+       
+        if(ammo)
+        {
+            ammo.fire(x, y, angle, speed, gx, gy);
+        }
+
+        if(resetFire)
+        {
+            context.nextFire = context.game.time.time + context.fireRate;
+        }
+
+    };
+
+
     Weapon.SingleBullet.prototype = Object.create(Phaser.Group.prototype);
     Weapon.SingleBullet.prototype.constructor = Weapon.SingleBullet;
 
@@ -101,9 +120,7 @@
         var x = source.x + 10;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
 
     };
 
@@ -138,10 +155,8 @@
         var x = source.x + 10;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 180, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
+        Weapon.fireAmmo(this, x, y, 180, this.bulletSpeed);
 
     };
 
@@ -176,11 +191,9 @@
         var x = source.x + 10;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 270, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 270, this.bulletSpeed, 0, 0, true);
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 90, this.bulletSpeed);
 
     };
 
@@ -215,16 +228,14 @@
         var x = source.x + 16;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 45, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 90, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 135, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 180, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 225, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 270, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 315, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
+        Weapon.fireAmmo(this, x, y, 45, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 90, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 135, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 180, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 225, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 270, this.bulletSpeed);
+        Weapon.fireAmmo(this, x, y, 315, this.bulletSpeed);
 
     };
 
@@ -259,9 +270,7 @@
         var x = source.x + 16;
         var y = (source.y + source.height / 2) + this.game.rnd.between(-10, 10);
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
 
     };
 
@@ -296,9 +305,7 @@
         var x = source.x + 40;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
 
     };
 
@@ -333,11 +340,9 @@
         var x = source.x + 20;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, -500);
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 500);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, -500, true);
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0);
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 500);
 
     };
 
@@ -376,8 +381,9 @@
 
         var x = source.x + 20;
         var y = source.y + 10;
+        var pattern = this.pattern[this.patternIndex];
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, this.pattern[this.patternIndex]);
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, pattern, true);
 
         this.patternIndex++;
 
@@ -385,8 +391,6 @@
         {
             this.patternIndex = 0;
         }
-
-        this.nextFire = this.game.time.time + this.fireRate;
 
     };
 
@@ -423,10 +427,8 @@
         var x = source.x + 10;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, -700);
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 700);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, -700, true);
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 700);
 
     };
 
@@ -463,9 +465,7 @@
         var x = source.x + 10;
         var y = source.y + 10;
 
-        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
-
-        this.nextFire = this.game.time.time + this.fireRate;
+        Weapon.fireAmmo(this, x, y, 0, this.bulletSpeed, 0, 0, true);
 
     };
 
@@ -483,11 +483,9 @@
 
     Weapon.Combo1.prototype.reset = function () {
 
-        this.weapon1.visible = false;
         this.weapon1.callAll('reset', null, 0, 0);
         this.weapon1.setAll('exists', false);
 
-        this.weapon2.visible = false;
         this.weapon2.callAll('reset', null, 0, 0);
         this.weapon2.setAll('exists', false);
 
@@ -515,15 +513,12 @@
 
     Weapon.Combo2.prototype.reset = function () {
 
-        this.weapon1.visible = false;
         this.weapon1.callAll('reset', null, 0, 0);
         this.weapon1.setAll('exists', false);
 
-        this.weapon2.visible = false;
         this.weapon2.callAll('reset', null, 0, 0);
         this.weapon2.setAll('exists', false);
 
-        this.weapon3.visible = false;
         this.weapon3.callAll('reset', null, 0, 0);
         this.weapon3.setAll('exists', false);
 
